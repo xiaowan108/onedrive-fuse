@@ -72,12 +72,14 @@ enable = true
 #path = "/tmp/onedrive_fuse-cache"
 # Max file size in cache. Default to be 16 MiB.
 # Files larger than it will not be cached and can only read as stream.
-max_cached_file_size = 16777216
+#max_cached_file_size = 16777216
+max_cached_file_size = 1073741824
 # Max file count in cache.
 max_files = 1024
 # Max total file size in cache. Default to be 256 MiB.
 # This must be not less than `max_cached_file_size`.
-max_total_size = 268435456
+#max_total_size = 268435456
+max_total_size = 2147483648
 
 [vfs.file.download]
 # Max number of chunks the streaming download buffer holds.
@@ -99,7 +101,9 @@ chunk_timeout = 20
 # Max file size of a file open in write mode. Default to be 2 MiB.
 # This should be smaller than `vfs.disk_cache.max_cached_file_size` since the write mode requires
 # the file to be in disk cache.
-max_size = 2097152
+#max_size = 2097152
+#1GB
+max_size = 1073741824
 # Delay between write call and actual uploading.
 # Multiple writes on a single file within this duration will only be uploaded once.
 flush_delay = 5
