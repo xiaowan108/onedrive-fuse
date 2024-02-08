@@ -7,6 +7,46 @@ Mount [Microsoft OneDrive][onedrive] storage as [FUSE] filesystem.
 [onedrive]: https://products.office.com/en-us/onedrive/online-cloud-storage
 [FUSE]: https://github.com/libfuse/libfuse
 
+## 使用這份指令安裝
+1. 安裝上述程式(需要安裝libssl-dev不然會出錯)
+   ```
+   sudo apt install pkg-config openssl libssl-dev fuse curl
+   ```
+2. 安裝Rust
+   ```
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   source ~/.cargo/env
+   rustc -V
+   ```
+3. 編譯+安裝
+   ```
+   cargo build --release
+   cargo install --path .
+   ```
+4. 登入
+   ```
+   onedrive-fuse login --read-write --client-id <paste-your-client-id-here>
+   ```
+5. 繼續登入，由於目前程式是監聽localhost的隨機連結埠，因此開啟後得到的回傳請轉接，例如使用putty轉發23456port到23456
+   ```
+   putty -ssh {user}@{ip} -P {port} -i "{path of key}" -L 23456:localhost:23456
+   ```
+6. 在瀏覽器刷新網頁回傳的網址，成功的話可以關閉網址和上方繼續登入用的終端
+7. 建立要掛載的資料夾
+   ```
+   mkdir ~/onedrive
+   ```
+8. 開始連線，這個程式會在前端開啟，請自行使用像screen或Systemd之類的在背景執行
+   ```
+   onedrive-fuse mount ~/onedrive -o permission.readonly=false
+   ```
+9. 中斷連線
+   ```
+   fusermount -u ~/onedrive
+   或是
+   unmount ~/onedrive
+   ```
+
 ## Installation
 
 *Note: For Nix users, the program is already packaged via Nix Flake in `flake.nix`.*
@@ -17,7 +57,6 @@ Mount [Microsoft OneDrive][onedrive] storage as [FUSE] filesystem.
     - fuse (libfuse)
 
 1.  Compile and install the program from crates.io:
-
     ```
     $ cargo install onedrive-fuse
     ```
